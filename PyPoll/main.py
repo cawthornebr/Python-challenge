@@ -5,9 +5,11 @@ import csv
 #define path of csv file
 csvpath = os.path.join('Resources/election_data.csv')
 
+votes={}
+
 #create variables, lists, and dictionarys 
 totalvotes=0
-blerb={}
+
 #Improved Reading using CSV module
 with open(csvpath, newline='') as csvfile:
 
@@ -18,8 +20,26 @@ with open(csvpath, newline='') as csvfile:
     header = next(csvreader)
     
     for row in csvreader:
-
+        vote=row[2]
+        if vote in votes:
+            votes[vote] += 1
+        else:
+            votes[vote] = 1 
         #for each row add one to the total votes
-        totalvotes=totalvotes+1
+        totalvotes+=1
 
-print(totalvotes)
+max=0
+maxname=""
+
+print(f"""Election Results
+-------------------------
+Total Votes: {totalvotes}
+-------------------------""")
+for vote, num in votes.items():
+    print(f'{vote}: {round(float(num)/totalvotes*100,3)}00% {str(num)}')
+    if num>max:
+        max=num
+        maxname=vote
+print(f"""-------------------------
+Winner: {maxname}
+-------------------------""")
